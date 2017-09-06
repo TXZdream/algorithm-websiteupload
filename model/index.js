@@ -20,19 +20,29 @@ var checkID = function (id) {
   })
 }
 
+var getTime = function () {
+  var d = new Date()
+  return d.getFullYear() + '-' +
+          (((d.getMonth() + 1) > 10) ? (d.getMonth() + 1) : ('0' + (d.getMonth() + 1))) + '-' +
+          (((d.getDate()) > 10) ? (d.getDate()) : ('0' + (d.getDate())))
+}
+
 op.addUrl = function (id, url) {
   return new Promise(async (resolve, reject) => {
     var d = new Date()
-    var time = d.toISOString().slice(0, 10)
+    var time = getTime()
+    console.log(time)
     var ret = await checkID(id)
     if (!ret) {
       return resolve(false)
     } else {
       db.run('Insert Into blogurl Values(?, ?, ?)', [id, url, time], function (err) {
         if (err) {
+          console.log('Insert new record fail.')
+          console.log(err)
           return resolve(false)
         } else {
-          console.log('Insert new record.')
+          console.log('Insert new record success.')
           return resolve(true)
         }
       })
