@@ -1,0 +1,48 @@
+{
+  "name": "algorithm-websiteupload",
+  "version": "1.0.0",
+  "description": "博客地址提交",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node app.js",
+    "initdb": "node db/init.js",
+    "dev": "./node_modules/.bin/node-dev app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TXZdream/algorithm-websiteupload.git"
+  },
+  "keywords": [
+    "algorithm",
+    "blog"
+  ],
+  "author": "TangXuanzhao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TXZdream/algorithm-websiteupload/issues"
+  },
+  "homepage": "https://github.com/TXZdream/algorithm-websiteupload#readme",
+  "devDependencies": {
+    "eslint": "^4.6.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "mocha": "^3.5.0",
+    "node-dev": "^3.1.3"
+  },
+  "dependencies": {
+    "koa": "^2.3.0",
+    "koa-body": "^2.3.0",
+    "koa-err": "^1.0.1",
+    "koa-logger": "^3.0.1",
+    "koa-pug": "^3.0.0-2",
+    "koa-router": "^7.2.1",
+    "koa-static": "^4.0.1",
+    "linebyline": "^1.3.0",
+    "mongodb": "^2.2.31",
+    "sqlite3": "^3.1.9"
+  }
+}
