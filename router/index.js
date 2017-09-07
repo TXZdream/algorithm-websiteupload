@@ -4,6 +4,7 @@ var path = require('path')
 
 var DBOperation = require('../model/index')
 var UserList = require('../model/getList')
+var AdminOperation = require('../model/admin')
 
 var router = new Router()
 
@@ -35,6 +36,16 @@ router.get('/hw.db', async (ctx, next) => {
   var passwd = require('crypto').createHash('md5').update(ctx.query.key).digest('hex')
   if (passwd === '21602fd426715dbf585e6ba2350acafa') {
     await send(ctx, filename, {root: path.join(__dirname, '../db')})
+  } else {
+    ctx.body = 'Not Found'
+  }
+})
+
+router.post('/admin', async (ctx, next) => {
+  var passwd = require('crypto').createHash('md5').update(ctx.request.body.key).digest('hex')
+  if (passwd === '21602fd426715dbf585e6ba2350acafa') {
+    var ret = await AdminOperation.addUserMessage(ctx.request.body.id, ctx.request.body.name)
+    ctx.body = {status: ret}
   } else {
     ctx.body = 'Not Found'
   }
