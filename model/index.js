@@ -22,6 +22,11 @@ var checkID = function (id) {
 
 var getTime = function () {
   var d = new Date()
+  var localTime = d.getTime()
+  var localOffset = d.getTimezoneOffset() * 60000
+  var UTC = localTime + localOffset
+  var offset = 8 // 东八区
+  d = new Date(offset * 3600000 + UTC)
   return d.getFullYear() + '-' +
           (((d.getMonth() + 1) > 10) ? (d.getMonth() + 1) : ('0' + (d.getMonth() + 1))) + '-' +
           (((d.getDate()) > 10) ? (d.getDate()) : ('0' + (d.getDate())))

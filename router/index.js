@@ -1,6 +1,9 @@
 var Router = require('koa-router')
+var send = require('koa-send')
+var path = require('path')
 
 var DBOperation = require('../model/index')
+var UserList = require('../model/getList')
 
 var router = new Router()
 
@@ -21,6 +24,21 @@ router.post('/', async (ctx, next) => {
   }
   ctx.body = {status: false}
   console.log(ctx.body)
+})
+
+router.get('/list', async (ctx, next) => {
+  var ret = await UserList.getBlogList()
+  ctx.body = ret
+})
+
+router.get('/hw.db', async (ctx, next) => {
+  var filename = 'hw.db'
+  var passwd = require('crypto').createHash('md5').update(ctx.query.key).digest('hex')
+  if (passwd === '21602fd426715dbf585e6ba2350acafa') {
+    await send(ctx, filename, {root: path.join(__dirname, '../db')})
+  } else {
+    ctx.body = 'Not Found'
+  }
 })
 
 module.exports = router
