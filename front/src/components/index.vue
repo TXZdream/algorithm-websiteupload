@@ -65,7 +65,7 @@ export default {
   },
   data () {
     var validateID = function (rule, value, callback) {
-      var re = /^(1)(4|5)([0-9]){6}/
+      var re = /^(1)(3|4|5)([0-9]){6}/
       if (value === '' || value.length !== 8 || !re.test(value)) {
         callback(new Error('请输入8位有效学号'))
       } else {
