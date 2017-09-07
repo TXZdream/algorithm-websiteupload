@@ -32,7 +32,6 @@ export default {
         }
       }, response => {
         self.$Loading.error()
-        console.log('Failed')
       })
     }
   },

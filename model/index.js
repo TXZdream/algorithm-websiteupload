@@ -4,7 +4,7 @@ var db = new sqlite.Database('./db/hw.db')
 
 var op = {}
 
-var checkID = function (id) {
+var checkID = function (id, password) {
   return new Promise((resolve, reject) => {
     db.get('Select * From students Where id=?', [id], function (err, row) {
       if (err) {
@@ -12,7 +12,18 @@ var checkID = function (id) {
         return reject(err)
       }
       if (row) {
-        return resolve(true)
+        if (row.password === null) {
+          var cryptoPassword = require('crypto').createHash('md5').update(password).digest('hex')
+          db.run('Update students Set password = ? Where id = ?', [cryptoPassword, id], function() {
+            return resolve(true)
+          })
+        } else {
+          if (row.password === require('crypto').createHash('md5').update(password).digest('hex')) {
+            return resolve(true)
+          } else {
+            return resolve(false)
+          }
+        }
       } else {
         return resolve(false)
       }
@@ -32,16 +43,17 @@ var getTime = function () {
           (((d.getDate()) > 10) ? (d.getDate()) : ('0' + (d.getDate())))
 }
 
-op.addUrl = function (id, url) {
+op.addUrl = function (id, url, password) {
   return new Promise(async (resolve, reject) => {
-    if (!id || !url) {
+    console.log('111')
+    if (!id || !url || !password) {
       return resolve(false)
     }
     var time = getTime()
     console.log(time)
-    var ret = await checkID(id)
+    var ret = await checkID(id, password)
     if (!ret) {
-      console.log('Can not find match id in students table.')
+      console.log('Can not find match id with password in students table.')
       return resolve(false)
     } else {
       db.run('Insert Into blogurl Values(?, ?, ?)', [id, url, time], function (err) {

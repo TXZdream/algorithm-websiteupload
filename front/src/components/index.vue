@@ -8,8 +8,11 @@
       <FormItem label='学号' prop='id'>
         <Input v-model='formValue.id' placeholder="请输入8位学号"></Input>
       </FormItem>
+      <FormItem label='密码' prop='password'>
+        <Input type='password' v-model='formValue.password' placeholder="请输入密码，若为首次输入，则该密码将作为账户密码"></Input>
+      </FormItem>
       <FormItem label='博客网址' prop='url'>
-        <Input v-model='formValue.url' type="textarea" placeholder="只允许输入一个网址" :autosize="{minRows: 6, maxRows: 7}"></Input>
+        <Input v-model='formValue.url' type="textarea" placeholder="只允许输入一个网址" :autosize="{minRows: 3, maxRows: 3}"></Input>
       </FormItem>
       <FormItem>
         <Button type="primary" @click='handleSubmit($event)' class='submit' long>提交</Button>
@@ -33,26 +36,24 @@ export default {
           this.$Loading.start()
           this.$http.post('/', {
             id: self.formValue.id,
-            url: self.formValue.url
+            url: self.formValue.url,
+            password: self.formValue.password
           }).then(response => {
             if (response.body.status) {
               self.$Loading.finish()
-              console.log('Success')
               self.$Notice.success({
                 title: '提交成功',
                 desc: '您的博客网址已成功提交'
               })
             } else {
               self.$Loading.error()
-              console.log('Failed-IncorrectData')
               self.$Notice.error({
                 title: '提交失败',
-                desc: '您的内容格式可能错误，或您已经提交过该博客地址'
+                desc: '可能的原因：输入的密码有误、提交的格式不正确、重复提交'
               })
             }
           }, response => {
             self.$Loading.error()
-            console.log('Failed-NetworkPronlem')
             self.$Notice.warning({
               title: '提交失败',
               desc: '与后台服务器连接失败，请联系管理员协助解决问题'
@@ -72,10 +73,17 @@ export default {
       }
     }
     var validateURL = function (rule, value, callback) {
-      var re = /^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/)(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~/])+$/
+      var re = /(((^https?:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)$/
       if (value === '' || !re.test(value)) {
-        callback('网址格式错误，注意检查是否加入http://或https://前缀')
+        callback('URL格式错误，注意检查是否加入http://或https://前缀')
         return
+      } else {
+        callback()
+      }
+    }
+    var validatePassword = function (rule, value, callback) {
+      if (value === '') {
+        callback('密码不能为空')
       } else {
         callback()
       }
@@ -83,7 +91,8 @@ export default {
     return {
       formValue: {
         id: '',
-        url: ''
+        url: '',
+        password: ''
       },
       validateRule: {
         id: [
@@ -97,6 +106,12 @@ export default {
             validator: validateURL,
             trigger: 'blur'
           }
+        ],
+        password: [
+          {
+            validator: validatePassword,
+            trigger: 'blur'
+          }
         ]
       }
     }
@@ -108,7 +123,7 @@ export default {
 .card {
   width: 360px;
   margin: 10% auto;
-  height: 500px;
+  height: 515px;
 }
 .title {
   text-align: center;

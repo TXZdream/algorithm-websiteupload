@@ -17,13 +17,12 @@ router.post('/', async (ctx, next) => {
     ctx.body = {status: false}
     return
   }
-  var ret = await DBOperation.addUrl(body.id, body.url)
+  var ret = await DBOperation.addUrl(body.id, body.url, body.password)
   if (ret) {
     ctx.body = {status: true}
     return
   }
   ctx.body = {status: false}
-  console.log(ctx.body)
 })
 
 router.get('/list', async (ctx, next) => {
