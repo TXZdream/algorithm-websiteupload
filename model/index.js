@@ -29,11 +29,14 @@ var getTime = function () {
 
 op.addUrl = function (id, url) {
   return new Promise(async (resolve, reject) => {
-    var d = new Date()
+    if (!id || !url) {
+      return resolve(false)
+    }
     var time = getTime()
     console.log(time)
     var ret = await checkID(id)
     if (!ret) {
+      console.log('Can not find match id in students table.')
       return resolve(false)
     } else {
       db.run('Insert Into blogurl Values(?, ?, ?)', [id, url, time], function (err) {
