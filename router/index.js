@@ -27,7 +27,7 @@ router.post('/', async (ctx, next) => {
 })
 
 router.get('/list', async (ctx, next) => {
-  var ret = await UserList.getBlogList()
+  var ret = await UserList.getBlogList(ctx.query)
   ctx.body = ret
 })
 
